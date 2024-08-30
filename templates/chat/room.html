@@ -1,0 +1,56 @@
+{% extends "../base.html" %}
+{% load static %}
+{% block title %}Chat | Room{% endblock %}
+{% block style %}
+<link href="{% static "chat/room.css" %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<br>
+<section class="dark:bg-gray-900">
+    <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
+        <div class=" lg:mt-0 lg:col-span-3">
+            Rooms List
+        </div>
+        <div class=" lg:col-span-9 pl-5 bg-gray-50 pt-3 ml-4 pb-3 p-3">
+            <div class="w-full text-center mb-5">
+                <div class="chat-container">
+                    <div class="chat-header">
+                        <h2>Chat Room (online 3)</h2>
+                    </div>
+                    <div class="chat-window chat_containers" id="chat_messages">
+                        {% for message in messages reversed %}
+                            {% include "./chat_messages.html" %}
+                        {% endfor %}
+                    </div>
+                    {% comment %} <form class="chat-input" method="POST" action="."> {% endcomment %}
+                    <form class="chat-input" 
+                        hx-post="{% url "chat:room" id=room.id%}" 
+                        hx-target="#chat_messages" 
+                        hx-swap="beforeend"
+                        _="on htmx:afterRequest reset() me"
+                    >
+                        {% comment %} <input type="text" placeholder="Type your message..."> {% endcomment %}
+                        {% csrf_token %}
+                        {{form.message}}
+                        <button type="submit">Send</button>
+                    </form>
+                </div>
+            </div>
+
+        </div>                
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    console.log("a")
+    function scrollToBottom() {
+        const container = document.querySelector('.chat_containers')
+        console.log(container)
+        container.scrollTop = container.scrollHeight;
+    }
+    scrollToBottom()
+
+</script>
+{% endblock %}

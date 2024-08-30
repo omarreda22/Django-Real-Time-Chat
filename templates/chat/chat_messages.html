@@ -1,0 +1,10 @@
+{% if message.user == user %}
+<div class="message user">
+    <p class="message-text">{{message.message}}</p>
+</div>
+{% else %}
+
+<div class="message">
+    <p class="message-text">{{message.message}}</p>
+</div>
+{% endif %}
