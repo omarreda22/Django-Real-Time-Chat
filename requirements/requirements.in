@@ -1,3 +1,4 @@
 django
 pillow
 django_htmx
+channels[daphne]

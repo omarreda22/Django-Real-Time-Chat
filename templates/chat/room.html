@@ -15,19 +15,23 @@
             <div class="w-full text-center mb-5">
                 <div class="chat-container">
                     <div class="chat-header">
-                        <h2>Chat Room (online 3)</h2>
+                        <h2 id="online-count">Chat Room (online )</h2>
                     </div>
                     <div class="chat-window chat_containers" id="chat_messages">
                         {% for message in messages reversed %}
                             {% include "./chat_messages.html" %}
                         {% endfor %}
                     </div>
-                    {% comment %} <form class="chat-input" method="POST" action="."> {% endcomment %}
-                    <form class="chat-input" 
+                    {% comment %} <form class="chat-input" method="POST" action="."> 
                         hx-post="{% url "chat:room" id=room.id%}" 
                         hx-target="#chat_messages" 
                         hx-swap="beforeend"
-                        _="on htmx:afterRequest reset() me"
+                        {% endcomment %}
+                    <form class="chat-input" 
+                        hx-ext="ws"
+                        ws-connect="/ws/chatroom/{{room.id}}/"
+                        ws-send
+                        _="on htmx:wsAfterSend reset() me"
                     >
                         {% comment %} <input type="text" placeholder="Type your message..."> {% endcomment %}
                         {% csrf_token %}

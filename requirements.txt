@@ -6,17 +6,74 @@
 #
 asgiref==3.8.1
     # via
+    #   channels
+    #   daphne
     #   django
     #   django-htmx
+attrs==24.2.0
+    # via
+    #   service-identity
+    #   twisted
+autobahn==24.4.2
+    # via daphne
+automat==24.8.1
+    # via twisted
+cffi==1.17.1
+    # via cryptography
+channels[daphne]==4.1.0
+    # via -r src/requirements/requirements.in
+constantly==23.10.4
+    # via twisted
+cryptography==43.0.1
+    # via
+    #   autobahn
+    #   pyopenssl
+    #   service-identity
+daphne==4.1.2
+    # via channels
 django==5.0.6
     # via
     #   -r src/requirements/requirements.in
+    #   channels
     #   django-htmx
 django-htmx==1.19.0
     # via -r src/requirements/requirements.in
+hyperlink==21.0.0
+    # via
+    #   autobahn
+    #   twisted
+idna==3.8
+    # via
+    #   hyperlink
+    #   twisted
+incremental==24.7.2
+    # via twisted
 pillow==10.3.0
     # via -r src/requirements/requirements.in
+pyasn1==0.6.0
+    # via
+    #   pyasn1-modules
+    #   service-identity
+pyasn1-modules==0.4.0
+    # via service-identity
+pycparser==2.22
+    # via cffi
+pyopenssl==24.2.1
+    # via twisted
+service-identity==24.1.0
+    # via twisted
 sqlparse==0.5.0
     # via django
+twisted[tls]==24.7.0
+    # via daphne
+txaio==23.1.1
+    # via autobahn
+typing-extensions==4.12.2
+    # via twisted
 tzdata==2024.1
     # via django
+zope-interface==7.0.3
+    # via twisted
+
+# The following packages are considered to be unsafe in a requirements file:
+# setuptools
