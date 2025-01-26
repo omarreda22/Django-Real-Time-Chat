@@ -1,0 +1,42 @@
+<div class="chat-room-list" id="chat-room-list" hx-swap-oob="outerHTML">
+    {% if rooms %}
+        {% for room in rooms %}
+            {% if room.sender == user %}
+                <a href="{% url "chat:room" id=room.id %}">
+
+                    <div class="chat-room">
+                        {% if room.receiver.avatar %}
+                        <img src="{{room.receiver.avatar.url}}" alt="User Avatar" class="chat-avatar">
+                        {% endif %}
+                        <div class="chat-details">
+                            <h2 class="chat-name">{{room.receiver.first_name|title}} {{room.receiver.last_name|title}}</h2>
+                            
+                        </div>
+
+                    </div>  
+                </a>
+            {%  else %}
+                <a href="{% url "chat:room" id=room.id %}">
+
+                    <div class="chat-room">
+                        {% if room.sender.avatar %}
+                        <img src="{{room.sender.avatar.url}}" alt="User Avatar" class="chat-avatar">
+                        {% endif %}
+                        <div class="chat-details">
+                            <h2 class="chat-name">{{room.sender.first_name|title}} {{room.sender.last_name|title}}</h2>
+                            
+                        </div>
+                        
+                    </div>  
+                </a>
+
+            {% endif %}
+            
+        {% endfor %}
+    {% else %}
+
+    <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-300" role="alert">
+        <span class="font-medium">No Chat Rooms Yet!</span> <a class="underline" href="{% url "accounts:home" %}">start one.</a>
+    </div>
+    {% endif %}
+</div>

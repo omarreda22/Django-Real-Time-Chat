@@ -6,16 +6,156 @@
 {% endblock %}
 {% block content %}
 <br>
+<style>
+.chat-container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.chat-container h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 1.8rem;
+    color: #444;
+}
+
+/* Chat Room List */
+.chat-room-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Individual Chat Room */
+.chat-room {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: #f9f9f9;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.chat-room:hover {
+    background: #f1f1f1;
+}
+
+/* Avatar */
+.chat-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+}
+
+/* Chat Details */
+.chat-details {
+    flex: 1;
+}
+
+.chat-name {
+    margin: 0;
+    font-size: 1.2rem;
+    color: #222;
+}
+
+.chat-last-message {
+    margin: 5px 0 0;
+    font-size: 0.9rem;
+    color: #555;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Timestamp */
+.chat-timestamp {
+    font-size: 0.85rem;
+    color: #888;
+    white-space: nowrap;
+}
+
+button {
+    background: linear-gradient(90deg, #a18cd1, #ff5733);
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+  }
+</style>
+
 <section class="dark:bg-gray-900">
     <div class="grid max-w-screen-xl px-4 py-8 mx-auto lg:gap-8 xl:gap-0 lg:py-16 lg:grid-cols-12">
         <div class=" lg:mt-0 lg:col-span-3">
-            Rooms List
+            <div class="chat-container">
+                <h1>Chat Rooms</h1>
+                <div class="chat-room-list" id="chat-room-list">
+                    {% if rooms %}
+        {% for room in rooms %}
+            {% if room.sender == user %}
+                <a href="{% url "chat:room" id=room.id %}">
+
+                    <div class="chat-room">
+                        {% if room.receiver.avatar %}
+                        <img src="{{room.receiver.avatar.url}}" alt="User Avatar" class="chat-avatar">
+                        {% endif %}
+                        <div class="chat-details">
+                            <h2 class="chat-name">{{room.receiver.first_name|title}} {{room.receiver.last_name|title}}</h2>
+                            <p class="chat-last-message">{{room.last_message|default:"No messages yet" }}</p>
+                        </div>
+                        <div class="chat-timestamp">{{room.created_time|time|default:"" }}</div>
+                    </div>  
+                </a>
+            {%  else %}
+                <a href="{% url "chat:room" id=room.id %}">
+
+                    <div class="chat-room">
+                        {% if room.sender.avatar %}
+                        <img src="{{room.sender.avatar.url}}" alt="User Avatar" class="chat-avatar">
+                        {% endif %}
+                        <div class="chat-details">
+                            <h2 class="chat-name">{{room.sender.first_name|title}} {{room.sender.last_name|title}}</h2>
+                            <p class="chat-last-message">{{room.last_message|default:"No messages yet" }}</p>
+                        </div>
+                        <div class="chat-timestamp">{{room.created_time|time|default:"" }}</div>
+                        
+                    </div>  
+                </a>
+
+            {% endif %}
+            
+        {% endfor %}
+    {% else %}
+                    <div class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-300" role="alert">
+                        <span class="font-medium">No Chat Rooms Yet!</span> <a class="underline" href="{% url "accounts:home" %}">start one.</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
         </div>
+        {% if "list" not in request.path  %}
         <div class=" lg:col-span-9 pl-5 bg-gray-50 pt-3 ml-4 pb-3 p-3">
             <div class="w-full text-center mb-5">
                 <div class="chat-container">
-                    <div class="chat-header">
-                        <h2 id="online-count">Chat Room (online )</h2>
+                    <div class="chat-header inline" id="online-count" style="background:#fff">
+                        {% if room.sender == user %}
+                            {{room.receiver.first_name|title}} {{room.receiver.last_name|title}}
+                            {%else%}
+                            {{room.sender.first_name|title}} {{room.sender.last_name|title}}
+                        {% endif %}
+                        <span >
+                        </span>
                     </div>
                     <div class="chat-window chat_containers" id="chat_messages">
                         {% for message in messages reversed %}
@@ -41,7 +181,8 @@
                 </div>
             </div>
 
-        </div>                
+        </div>     
+        {% endif %}           
     </div>
 </section>
 {% endblock %}

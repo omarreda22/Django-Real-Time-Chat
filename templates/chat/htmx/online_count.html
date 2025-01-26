@@ -1,1 +1,13 @@
-<h2 id="online-count" hx-swap-oob="outerHTML">Chat Room (online {{online_count}})</h2>
+{% comment %} <span style="font-size:17px; {{style}}" id="online-count" style={{style}} hx-swap-oob="outerHTML">
+    ({{online_count}})
+</span> {% endcomment %}
+<div class="chat-header inline" id="online-count" style={{style}}>
+    {% if room.sender == user %}
+        {{room.receiver.first_name|title}} {{room.receiver.last_name|title}}
+        {%else%}
+        {{room.sender.first_name|title}} {{room.sender.last_name|title}}
+    {% endif %}
+    <span style="font-size:17px" id="online-count"  hx-swap-oob="outerHTML">
+        ({{online_count}})
+    </span> 
+</div>

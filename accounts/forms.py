@@ -23,6 +23,14 @@ class RegisterForm(forms.ModelForm):
             "avatar",
         ]
 
+    def clean_email(self):
+        email = self.cleaned_data.get("email")
+        get_user = User.objects.filter(email__iexact=email).distinct()
+        if get_user.exists():
+            raise ValidationError("This User Existed")
+
+        return email
+
     def clean_password2(self):
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
